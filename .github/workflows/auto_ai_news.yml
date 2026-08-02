@@ -2,7 +2,7 @@ name: Auto AI News Bot
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # हर 6 घंटे में ऑटोमैटिक चलेगा
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,3 +19,4 @@ jobs:
 
       - name: Run AI Script
         run: node auto_news.js
+        

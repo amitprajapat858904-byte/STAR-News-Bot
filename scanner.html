@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Live Book Scanner</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- OCR Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        .scanner-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        video {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+        .scan-overlay {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            border: 3px dashed #00ffcc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .status-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #00ffcc;
+        }
+        .scanned-result {
+            margin-top: 15px;
+            background: #fff;
+            color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📖 AI Live Book Scanner</h2>
+    <p style="font-size: 12px; color: #aaa;">किताब के पन्ने को हरे फ्रेम के अंदर रोकें, यह ऑटोमैटिक स्कैन हो जाएगा।</p>
+
+    <div class="scanner-container">
+        <video id="webcam" autoplay playsinline></video>
+        <div class="scan-overlay"></div>
+    </div>
+
+    <div id="status" class="status-box">🎥 कैमरा चालू हो रहा है...</div>
+
+    <div id="result-box" class="scanned-result" style="display:none;">
+        <h4 style="margin:0 0 10px 0; color:#1a237e;">✅ टेक्स्ट अपलोड हो गया:</h4>
+        <div id="output-text"></div>
+    </div>
+
+    <script src="scanner.js"></script>
+</body>
+</html>

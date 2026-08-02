@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - News Upload</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f6f9; }
+    .upload-card { background: white; padding: 20px; border-radius: 12px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; background: #059669; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    #msg { font-weight: bold; color: green; margin-top: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="upload-card">
+    <h2>🚀 नई खबर अपलोड करें</h2>
+    <input type="text" id="news-title" placeholder="न्यूज की हेडिंग (Title)" required>
+    <select id="news-category">
+      <option value="NATIONAL">नेशनल (National)</option>
+      <option value="INTERNATIONAL">इंटरनेशनल (International)</option>
+      <option value="EDUCATION">एजुकेशन (Education)</option>
+    </select>
+    <textarea id="news-desc" rows="5" placeholder="खबर का पूरा विवरण लिखें..." required></textarea>
+    <button onclick="uploadNews()">वेबसाइट पर पब्लिश करें 📤</button>
+    <p id="msg"></p>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <script>
+    // Firebase Init
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBnNJxfB51ZE17jLlJoYpk3fbhJ3tVJvM",
+      authDomain: "starnationalinternationa-4e45b.firebaseapp.com",
+      projectId: "starnationalinternationa-4e45b",
+      storageBucket: "starnationalinternationa-4e45b.firebasestorage.app",
+      messagingSenderId: "664854850863",
+      appId: "1:664854850863:web:8410bed578bf3a0c0f05da"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Upload Function
+    async function uploadNews() {
+      const title = document.getElementById('news-title').value;
+      const category = document.getElementById('news-category').value;
+      const desc = document.getElementById('news-desc').value;
+      const msg = document.getElementById('msg');
+
+      if(!title || !desc) {
+        alert("कृपया सभी जानकारी भरें!");
+        return;
+      }
+
+      msg.innerText = "⏳ अपलोड हो रहा है...";
+
+      try {
+        await db.collection("news").add({
+          title: title,
+          category: category,
+          description: desc,
+          timestamp: new Date()
+        });
+
+        msg.innerText = "✅ खबर सफलतापूर्वक वेबसाइट पर लाइव हो गई!";
+        document.getElementById('news-title').value = "";
+        document.getElementById('news-desc').value = "";
+      } catch (error) {
+        msg.innerText = "❌ एरर: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - News Upload</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f6f9; }
+    .upload-card { background: white; padding: 20px; border-radius: 12px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; background: #059669; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    #msg { font-weight: bold; color: green; margin-top: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="upload-card">
+    <h2>🚀 नई खबर अपलोड करें</h2>
+    <input type="text" id="news-title" placeholder="न्यूज की हेडिंग (Title)" required>
+    <select id="news-category">
+      <option value="NATIONAL">नेशनल (National)</option>
+      <option value="INTERNATIONAL">इंटरनेशनल (International)</option>
+      <option value="EDUCATION">एजुकेशन (Education)</option>
+    </select>
+    <textarea id="news-desc" rows="5" placeholder="खबर का पूरा विवरण लिखें..." required></textarea>
+    <button onclick="uploadNews()">वेबसाइट पर पब्लिश करें 📤</button>
+    <p id="msg"></p>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBnNJxfB51ZE17jLlJoYpk3fbhJ3tVJvM",
+      authDomain: "starnationalinternationa-4e45b.firebaseapp.com",
+      projectId: "starnationalinternationa-4e45b",
+      storageBucket: "starnationalinternationa-4e45b.firebasestorage.app",
+      messagingSenderId: "664854850863",
+      appId: "1:664854850863:web:8410bed578bf3a0c0f05da"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function uploadNews() {
+      const title = document.getElementById('news-title').value;
+      const category = document.getElementById('news-category').value;
+      const desc = document.getElementById('news-desc').value;
+      const msg = document.getElementById('msg');
+
+      if(!title || !desc) {
+        alert("कृपया सभी जानकारी भरें!");
+        return;
+      }
+
+      msg.innerText = "⏳ अपलोड हो रहा है...";
+
+      try {
+        await db.collection("news").add({
+          title: title,
+          category: category,
+          description: desc,
+          timestamp: new Date()
+        });
+
+        msg.innerText = "✅ खबर सफलतापूर्वक वेबसाइट पर लाइव हो गई!";
+        document.getElementById('news-title').value = "";
+        document.getElementById('news-desc').value = "";
+      } catch (error) {
+        msg.innerText = "❌ एरर: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>

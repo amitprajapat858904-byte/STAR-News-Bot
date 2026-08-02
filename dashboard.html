@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR CAREER 360 - Computer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; height: 100vh; background: #1e293b; position: fixed; color: white; padding-top: 20px; }
+        .sidebar a { color: #94a3b8; text-decoration: none; padding: 12px 20px; display: block; font-weight: 500; }
+        .sidebar a:hover, .sidebar a.active { background: #0f172a; color: white; border-left: 4px solid #3b82f6; }
+        .main-content { margin-left: 260px; padding: 30px; }
+        .card-custom { background: white; border-radius: 10px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Left Sidebar (Navigation) -->
+<div class="sidebar">
+    <h4 class="text-center text-white mb-4">STAR CAREER 360</h4>
+    <a href="#" class="active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+    <a href="#"><i class="bi bi-journal-plus me-2"></i> Add Content (News/PDF/Jobs)</a>
+    <a href="#"><i class="bi bi-people me-2"></i> Team Access (Give Jobs)</a>
+    <a href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🖥️ Control Panel</h2>
+        <span class="badge bg-success px-3 py-2">Master Admin Active</span>
+    </div>
+
+    <!-- Upload Form Card -->
+    <div class="card-custom">
+        <h5 class="mb-3 text-primary">📌 नया कंटेंट जोड़ें (Upload Section)</h5>
+        <form id="contentForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label font-weight-bold">कैटेगरी (Select Type)</label>
+                    <select id="contentType" class="form-select" onchange="togglePdfField()">
+                        <option value="news">📰 न्यूज़ / ताज़ा अपडेट (News Update)</option>
+                        <option value="pdf">📄 PDF / नोट्स (Study Material)</option>
+                        <option value="book">📚 पूरी पुस्तक (E-Book)</option>
+                        <option value="job">💼 सरकारी नौकरी / जॉब अपडेट (Job Alert)</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">शीर्षक (Title)</label>
+                    <input type="text" id="title" class="form-control" placeholder="यहाँ टाइटल लिखें..." required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">थंबनेल/इमेज लिंक (Image URL)</label>
+                    <input type="url" id="image" class="form-control" placeholder="https://..." required>
+                </div>
+                <div class="col-md-6 mb-3" id="pdfField" style="display:none;">
+                    <label class="form-label">PDF / Document Link (Google Drive / Direct)</label>
+                    <input type="url" id="pdfUrl" class="form-control" placeholder="https://drive.google.com/...">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">पूरा विवरण (Description / Full Details)</label>
+                <textarea id="details" class="form-control" rows="5" placeholder="यहाँ पूरी खबर या जॉब डिटेल्स लिखें..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4 py-2">वेबसाइट पर पब्लिश करें 🚀</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "starnationalinternationa-4e45b.firebaseapp.com",
+    databaseURL: "https://starnationalinternationa-4e45b-default-rtdb.firebaseio.com",
+    projectId: "starnationalinternationa-4e45b",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  function togglePdfField() {
+      const type = document.getElementById('contentType').value;
+      document.getElementById('pdfField').style.display = (type === 'news') ? 'none' : 'block';
+  }
+
+  document.getElementById('contentForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const type = document.getElementById('contentType').value;
+      const title = document.getElementById('title').value;
+      const image = document.getElementById('image').value;
+      const pdf = document.getElementById('pdfUrl').value || '';
+      const details = document.getElementById('details').value;
+
+      db.ref('posts').push({
+          type: type,
+          title: title,
+          image: image,
+          pdf: pdf,
+          details: details,
+          date: new Date().toLocaleDateString('hi-IN')
+      }).then(() => {
+          alert('सफलतापूर्वक पब्लिश हो गया!');
+          document.getElementById('contentForm').reset();
+          togglePdfField();
+      }).catch(err => alert('एरर: ' + err.message));
+  });
+
+  function logout() {
+      firebase.auth().signOut().then(() => {
+          window.location.href = "login.html";
+      });
+  }
+</script>
+
+</body>
+</html>

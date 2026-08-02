@@ -1,0 +1,21 @@
+name: Auto AI News Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # हर 6 घंटे में ऑटोमैटिक चलेगा
+  workflow_dispatch:
+
+jobs:
+  run-ai:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run AI Script
+        run: node auto_news.js

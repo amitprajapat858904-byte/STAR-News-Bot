@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 Lakh+ MCQ Quiz - STAR CAREER 360</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; }
+        .header { background: #1a237e; color: #fff; text-align: center; padding: 15px; font-weight: bold; font-size: 18px; border-radius: 8px; }
+        .quiz-card { background: #fff; padding: 18px; margin: 15px auto; max-width: 500px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .option-btn { width: 100%; text-align: left; padding: 10px; margin: 6px 0; border: 1px solid #ccc; background: #fff; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .option-btn:hover { background: #e8eaf6; }
+        .correct { background: #c8e6c9 !important; border-color: #2e7d32 !important; font-weight: bold; }
+        .wrong { background: #ffcdd2 !important; border-color: #c62828 !important; font-weight: bold; }
+        .next-btn { display: none; width: 100%; background: #1a237e; color: #fff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .score-box { text-align: center; font-size: 18px; font-weight: bold; color: #1a237e; }
+    </style>
+</head>
+<body>
+
+    <div class="header">🧠 Online Mock Quiz (Hindi & English)</div>
+
+    <div class="quiz-card" id="quiz-box">
+        <div style="font-size: 12px; color: #666; margin-bottom: 5px;" id="q-category">Topic: General Knowledge</div>
+        <h3 id="question-text" style="font-size: 16px; margin: 5px 0 15px 0; color: #111;">Question Loading...</h3>
+        <div id="options-box"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न (Next Question) ➔</button>
+    </div>
+
+    <script>
+        // Sample High-Yield Question Bank (Bilingual)
+        const sampleQuestions = [
+            {
+                q: "1. भारत के संविधान के जनक के रूप में किसे जाना जाता है? / Who is known as the Father of the Indian Constitution?",
+                options: ["Mahatma Gandhi", "Dr. B. R. Ambedkar", "Jawaharlal Nehru", "Sardar Patel"],
+                ans: 1
+            },
+            {
+                q: "2. प्रकाश संश्लेषण के दौरान पौधे कौन सी गैस छोड़ते हैं? / Which gas is released by plants during photosynthesis?",
+                options: ["Carbon Dioxide", "Nitrogen", "Oxygen", "Hydrogen"],
+                ans: 2
+            },
+            {
+                q: "3. भारत की सबसे लंबी नदी कौन सी है? / Which is the longest river in India?",
+                options: ["Yamuna", "Ganga", "Godavari", "Narmada"],
+                ans: 1
+            },
+            {
+                q: "4. मानव शरीर में कुल कितनी हड्डियाँ होती हैं? / How many bones are there in the human body?",
+                options: ["206", "208", "210", "300"],
+                ans: 0
+            },
+            {
+                q: "5. कंप्यूटर का मस्तिष्क किसे कहा जाता है? / What is called the Brain of the Computer?",
+                options: ["RAM", "Hard Disk", "CPU", "Monitor"],
+                ans: 2
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const qObj = sampleQuestions[currentIndex];
+            document.getElementById('question-text').innerText = qObj.q;
+            const optBox = document.getElementById('options-box');
+            optBox.innerHTML = '';
+            document.getElementById('next-btn').style.display = 'none';
+
+            qObj.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(btn, idx, qObj.ans);
+                optBox.appendChild(btn);
+            });
+        }
+
+        function selectOption(btn, selected, correct) {
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correct].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < sampleQuestions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('quiz-box').innerHTML = `
+                    <div class="score-box">
+                        🎉 क्विज़ पूरा हुआ!<br><br>
+                        आपका स्कोर: ${score} / ${sampleQuestions.length}
+                    </div>
+                    <button style="width:100%; margin-top:20px; padding:10px; background:#1a237e; color:#fff; border:none; border-radius:5px; font-weight:bold;" onclick="location.reload()">फिर से टेस्ट दें</button>
+                `;
+            }
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>

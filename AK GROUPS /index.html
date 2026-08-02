@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STAR CAREER 360 & NEWS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="brand">STAR <span>CAREER 360</span></div>
+    <button class="vip-btn" onclick="switchTab('plan')">👑 VIP Pass ₹49</button>
+  </header>
+
+  <!-- YouTube Style Horizontal Scroll Tags (ऊपर वाली गोल पट्टियाँ) -->
+  <div class="tags-wrapper">
+    <button class="tag active" onclick="switchTab('news')">All News</button>
+    <button class="tag" onclick="switchTab('edu')">1 Lakh+ Questions</button>
+    <button class="tag" onclick="switchTab('plan')">₹49 Plan</button>
+    <button class="tag" onclick="switchTab('reporter')">Reporter Portal</button>
+    <button class="tag">NEET / JEE</button>
+    <button class="tag">SSC & Govt</button>
+    <button class="tag">Current Affairs</button>
+  </div>
+
+  <main class="container">
+
+    <!-- 1. LIVE NEWS SECTION (YouTube UI Grid) -->
+    <section id="tab-news" class="tab-content active">
+      <div class="ticker-box">
+        <span class="live-dot">● LIVE</span>
+        <marquee behavior="scroll" direction="left" id="marquee-news">ताज़ा खबरें लोड हो रही हैं...</marquee>
+      </div>
+
+      <h3 class="section-heading">Recently Published Updates</h3>
+      <p id="status"></p>
+      
+      <!-- YT/App Style Card Grid -->
+      <div id="news-container" class="app-grid"></div>
+    </section>
+
+    <!-- 2. QUESTION BANK SECTION -->
+    <section id="tab-edu" class="tab-content">
+      <h3 class="section-heading">Practice Tests (NEET, SSC, History, GK)</h3>
+      <select id="exam-select" onchange="loadQuestions()" class="app-select">
+        <option value="all">🎯 All Competitions</option>
+        <option value="neet">🔬 NEET / JEE</option>
+        <option value="ssc">🏛️ SSC / Govt Exams</option>
+        <option value="gk">🗺️ History & Geography</option>
+      </select>
+      <div id="question-box" class="quiz-grid"></div>
+    </section>
+
+    <!-- 3. VIP CHECKOUT SECTION -->
+    <section id="tab-plan" class="tab-content">
+      <div class="vip-card">
+        <span class="badge">PREMIUM PASS</span>
+        <h2>Unlimited Access @ ₹49/Month</h2>
+        <p class="trial">🎁 21 Days Free Online Trial</p>
+        
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=17078100022280@upi&pn=STAR_CAREER360&am=49&cu=INR" alt="QR Code">
+          <p>Scan with PhonePe, Paytm, GPay</p>
+        </div>
+
+        <a href="upi://pay?pa=17078100022280@upi&pn=STAR_CAREER360&am=49&cu=INR" class="pay-btn">⚡ Direct Pay ₹49 via UPI</a>
+        
+        <div class="utr-input">
+          <input type="text" id="utr-number" placeholder="Enter 12-Digit UTR Number">
+          <button onclick="verifyPayment()">Activate</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. REPORTER PORTAL -->
+    <section id="tab-reporter" class="tab-content">
+      <div class="form-card">
+        <h3>🎤 Reporter Portal (Earn Money)</h3>
+        <form onsubmit="registerReporter(event)">
+          <input type="text" placeholder="Full Name" required>
+          <input type="tel" placeholder="WhatsApp Number" required>
+          <input type="text" placeholder="City / State" required>
+          <textarea placeholder="Write News Details..." rows="4" required></textarea>
+          <button type="submit" class="submit-btn">Submit News</button>
+        </form>
+        <p id="reporter-success"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+  <!-- वेबसाइट के सबसे नीचे यह फुटर जोड़ें -->
+  <footer style="background: #012a4a; color: white; text-align: center; padding: 15px; margin-top: 30px; font-size: 13px;">
+    <p>&copy; 2026 STAR CAREER360. All Rights Reserved | Education & News Portal</p>
+    <p style="font-size: 11px; color: #ff9800; margin-top: 6px;">
+      Powered by <strong>AK foundation</strong> (Govt. Registered MSME Enterprise)[span_0](start_span)[span_0](end_span)
+    </p>
+  </footer>
+
+</body>
+</html>
+</body>
+</html>

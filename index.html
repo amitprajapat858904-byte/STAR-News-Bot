@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR CAREER 360</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 10px; }
+        .header { background: #1a237e; color: white; padding: 15px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 18px; }
+        .nav-btns { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; }
+        .nav-btns button { background: #e8eaf6; color: #1a237e; border: 1px solid #1a237e; padding: 8px 12px; border-radius: 20px; font-weight: bold; white-space: nowrap; cursor: pointer; }
+        .nav-btns button:hover { background: #1a237e; color: white; }
+    </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+    <div class="header">STAR CAREER 360</div>
+
+    <div class="nav-btns">
+        <button onclick="changeCategory('all')">All News</button>
+        <button onclick="changeCategory('news')">News</button>
+        <button onclick="changeCategory('pdf')">PDF & Questions</button>
+        <button onclick="changeCategory('books')">Books</button>
+        <button onclick="changeCategory('jobs')">Jobs</button>
+    </div>
+
+    <!-- यहाँ सारी पोस्ट्स लोड होंगी -->
+    <div id="news-container">
+        <p style="text-align:center; padding:20px; color:#666;">लोड हो रहा है...</p>
+    </div>
+
+    <!-- SCRIPT JS LINK -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+<div class="nav-btns">
+    <button onclick="changeCategory('all')">All News</button>
+    <button onclick="changeCategory('news')">News</button>
+    <button onclick="window.location.href='quiz.html'" style="background:#d32f2f; color:#fff;">🧠 1 Lakh+ Quiz Live</button>
+    <button onclick="changeCategory('pdf')">PDF & Questions</button>
+    <button onclick="changeCategory('books')">Books</button>
+    <button onclick="changeCategory('jobs')">Jobs</button>
+</div>

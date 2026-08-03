@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Book Importer & Study Hub</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .btn { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #1d4ed8; }
+        .book-item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        .premium-badge { background: #d97706; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .free-badge { background: #059669; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>📚 Auto Legal Book & Notes Importer</h2>
+        <p>एक क्लिक में हजारों मुफ़्त और लीगल किताबें/चैप्टर्स अपनी वेबसाइट और फ़ायरबेस पर ऑटो-अपलोड करें।</p>
+        <button class="btn" onclick="fetchAndImportBooks()">🚀 Auto-Fetch & Import Books</button>
+        <p id="status" style="margin-top: 15px; font-weight: bold; color: #2563eb;"></p>
+    </div>
+
+    <div class="card">
+        <h3>📖 आपके ऐप/वेबसाइट पर लाइव बुक्स:</h3>
+        <div id="book-list">लोड हो रहा है...</div>
+    </div>
+</div>
+
+<script>
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBBnNJxfB51ZEl7jLlJoYpk3fbhJ3tVJvM",
+  authDomain: "starnationalinternationa-4e45b.firebaseapp.com",
+  databaseURL: "https://starnationalinternationa-4e45b-default-rtdb.firebaseio.com",
+  projectId: "starnationalinternationa-4e45b",
+  storageBucket: "starnationalinternationa-4e45b.firebasestorage.app",
+  messagingSenderId: "664854850863",
+  appId: "1:664854850863:web:8410bed578bf3a0c0f05da"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
+
+// 1. Legal Books Fetcher Function (Gutendex Open API)
+async function fetchAndImportBooks() {
+    const status = document.getElementById('status');
+    status.innerText = "⚡ मुफ़्त और लीगल बुक्स खोजी जा रही हैं...";
+
+    try {
+        // Science & General Knowledge Open-Domain Books
+        const response = await fetch('https://gutendex.com/books/?topic=science');
+        const data = await response.json();
+        
+        const books = data.results.slice(0, 5); // पहले 5 किताबें इंपोर्ट करें
+        
+        for (let i = 0; i < books.length; i++) {
+            const book = books[i];
+            const isPremium = i >= 2; // पहली 2 किताबें मुफ़्त, बाकी मेंबरशिप/प्रीमियम के लिए
+            
+            await db.ref('imported_books/' + book.id).set({
+                title: book.title,
+                author: book.authors[0] ? book.authors[0].name : "Unknown",
+                downloadUrl: book.formats['text/html'] || book.formats['application/pdf'] || "#",
+                isPremium: isPremium,
+                uploadedAt: new Date().toLocaleDateString('hi-IN')
+            });
+        }
+
+        status.innerText = "✅ सफ़लतापूर्वक मुफ़्त किताबें आपके डेटाबेस में इंपोर्ट हो गईं!";
+        loadBooks();
+    } catch (err) {
+        console.error(err);
+        status.innerText = "❌ किताबें लाने में समस्या आई।";
+    }
+}
+
+// 2. Display Loaded Books
+function loadBooks() {
+    const bookList = document.getElementById('book-list');
+    db.ref('imported_books').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+            bookList.innerHTML = "<p>अभी कोई किताब नहीं है। ऊपर दिए बटन पर क्लिक करें।</p>";
+            return;
+        }
+
+        let html = "";
+        for (let key in data) {
+            const book = data[key];
+            const badge = book.isPremium 
+                ? '<span class="premium-badge">🔒 Premium (₹99/mo)</span>' 
+                : '<span class="free-badge">FREE</span>';
+
+            html += `
+                <div class="book-item">
+                    <div>
+                        <strong>${book.title}</strong><br>
+                        <small style="color:#666;">लेखक: ${book.author}</small>
+                    </div>
+                    <div>
+                        ${badge}
+                        <a href="${book.downloadUrl}" target="_blank" style="margin-left:10px; text-decoration:none; font-weight:bold; color:#2563eb;">पढ़ें ➔</a>
+                    </div>
+                </div>
+            `;
+        }
+        bookList.innerHTML = html;
+    });
+}
+
+window.onload = loadBooks;
+</script>
+
+</body>
+</html>

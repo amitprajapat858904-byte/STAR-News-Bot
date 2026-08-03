@@ -7,6 +7,8 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Razorpay Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
@@ -17,6 +19,7 @@
         .book-item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
         .premium-badge { background: #d97706; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .free-badge { background: #059669; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .pay-btn { background: #059669; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -24,7 +27,7 @@
 <div class="container">
     <div class="card">
         <h2>📚 Auto Legal Book & Notes Importer</h2>
-        <p>एक क्लिक में हजारों मुफ़्त और लीगल किताबें/चैप्टर्स अपनी वेबसाइट और फ़ायरबेस पर ऑटो-अपलोड करें।</p>
+        <p>एक क्लिक में फ्री और ₹49/माह प्रीमियम किताबें ऑटो-इंपोर्ट करें।</p>
         <button class="btn" onclick="fetchAndImportBooks()">🚀 Auto-Fetch & Import Books</button>
         <p id="status" style="margin-top: 15px; font-weight: bold; color: #2563eb;"></p>
     </div>
@@ -52,21 +55,22 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// 1. Legal Books Fetcher Function (Gutendex Open API)
+let isUserSubscribed = localStorage.getItem('isSubscribed') === 'true';
+
+// 1. Fetch Legal Books
 async function fetchAndImportBooks() {
     const status = document.getElementById('status');
-    status.innerText = "⚡ मुफ़्त और लीगल बुक्स खोजी जा रही हैं...";
+    status.innerText = "⚡ बुक्स खोजी जा रही हैं...";
 
     try {
-        // Science & General Knowledge Open-Domain Books
         const response = await fetch('https://gutendex.com/books/?topic=science');
         const data = await response.json();
         
-        const books = data.results.slice(0, 5); // पहले 5 किताबें इंपोर्ट करें
+        const books = data.results.slice(0, 5);
         
         for (let i = 0; i < books.length; i++) {
             const book = books[i];
-            const isPremium = i >= 2; // पहली 2 किताबें मुफ़्त, बाकी मेंबरशिप/प्रीमियम के लिए
+            const isPremium = i >= 2; // पहली 2 फ्री, बाकी ₹49 प्रीमियम
             
             await db.ref('imported_books/' + book.id).set({
                 title: book.title,
@@ -77,7 +81,7 @@ async function fetchAndImportBooks() {
             });
         }
 
-        status.innerText = "✅ सफ़लतापूर्वक मुफ़्त किताबें आपके डेटाबेस में इंपोर्ट हो गईं!";
+        status.innerText = "✅ सफ़लतापूर्वक पुस्तकें इंपोर्ट हो गईं!";
         loadBooks();
     } catch (err) {
         console.error(err);
@@ -85,7 +89,7 @@ async function fetchAndImportBooks() {
     }
 }
 
-// 2. Display Loaded Books
+// 2. Display Books with Payment Logic
 function loadBooks() {
     const bookList = document.getElementById('book-list');
     db.ref('imported_books').on('value', (snapshot) => {
@@ -99,8 +103,15 @@ function loadBooks() {
         for (let key in data) {
             const book = data[key];
             const badge = book.isPremium 
-                ? '<span class="premium-badge">🔒 Premium (₹99/mo)</span>' 
+                ? '<span class="premium-badge">🔒 Premium (₹49/mo)</span>' 
                 : '<span class="free-badge">FREE</span>';
+
+            let actionButton = "";
+            if (!book.isPremium || isUserSubscribed) {
+                actionButton = `<a href="${book.downloadUrl}" target="_blank" style="margin-left:10px; text-decoration:none; font-weight:bold; color:#2563eb;">पढ़ें ➔</a>`;
+            } else {
+                actionButton = `<button class="pay-btn" onclick="startPayment()">Unlock (₹49)</button>`;
+            }
 
             html += `
                 <div class="book-item">
@@ -110,13 +121,39 @@ function loadBooks() {
                     </div>
                     <div>
                         ${badge}
-                        <a href="${book.downloadUrl}" target="_blank" style="margin-left:10px; text-decoration:none; font-weight:bold; color:#2563eb;">पढ़ें ➔</a>
+                        ${actionButton}
                     </div>
                 </div>
             `;
         }
         bookList.innerHTML = html;
     });
+}
+
+// 3. Razorpay Payment Gateway Integration (₹49)
+function startPayment() {
+    var options = {
+        "key": "YOUR_RAZORPAY_KEY_ID", // Razorpay Dashboard से अपनी Key ID डालें
+        "amount": 4900, // ₹49 (Paise in integer, e.g., 4900 = ₹49)
+        "currency": "INR",
+        "name": "STAR Study Hub",
+        "description": "Monthly Pass Membership (₹49/month)",
+        "handler": function (response){
+            alert("पेमेंट सफल रहा! Payment ID: " + response.razorpay_payment_id);
+            localStorage.setItem('isSubscribed', 'true');
+            isUserSubscribed = true;
+            loadBooks(); // रिफ्रेश करके बुक्स अनलॉक कर देगा
+        },
+        "prefill": {
+            "name": "Student",
+            "email": "student@example.com"
+        },
+        "theme": {
+            "color": "#2563eb"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
 }
 
 window.onload = loadBooks;

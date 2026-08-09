@@ -3,104 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STAR News - 24x7 AI News Portal</title>
-    
-    <!-- Large Image Preview Tag for Discover -->
+    <title>STAR News - 195 देशों की खबरें & गेम्स</title>
     <meta name="robots" content="index, follow, max-image-preview:large">
-
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            top: 0 !important; /* Google Translate का टॉप बार फिक्स करने के लिए */
-        }
-        /* Google Translate Banner को रीडायरेक्ट करने से रोकने के लिए CSS फिक्स */
-        .goog-te-banner-frame {
-            display: none !important;
-        }
-        .goog-te-gadget {
-            font-size: 14px !important;
-        }
-        header {
-            background-color: #d32f2f;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-        .news-card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-left: 5px solid #d32f2f;
-        }
-        .news-title {
-            color: #111;
-            margin-top: 0;
-            font-size: 20px;
-            line-height: 1.4;
-        }
-        .news-date {
-            color: #777;
-            font-size: 12px;
-            margin-bottom: 15px;
-            display: block;
-        }
-        .news-content {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #444;
-        }
-        #loading {
-            text-align: center;
-            font-size: 18px;
-            color: #666;
-            margin-top: 40px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; background-color: #f6f6f6; color: #222; top: 0px !important; }
+        
+        /* Top Header Navigation */
+        .top-header { background-color: #004d40; color: white; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-box { display: flex; align-items: center; gap: 10px; }
+        .logo { background: #d32f2f; color: white; font-weight: bold; padding: 8px 12px; border-radius: 50%; font-size: 16px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .brand-name { font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Scrolling Category Bar */
+        .category-bar { background: #00332c; white-space: nowrap; overflow-x: auto; padding: 8px 10px; }
+        .category-bar a { color: #e0e0e0; text-decoration: none; padding: 8px 14px; font-size: 14px; font-weight: 500; display: inline-block; }
+        .category-bar a.active { color: #fff; font-weight: bold; border-bottom: 2px solid #ffeb3b; }
+        
+        /* Trending Section */
+        .trending-container { background: white; margin: 12px 10px 5px 10px; padding: 12px; border-radius: 6px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .trending-badge { background: #d32f2f; color: white; font-weight: bold; font-size: 12px; padding: 6px 10px; border-radius: 4px; white-space: nowrap; }
+        .trending-text { font-size: 14px; color: #111; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 10px; }
+        
+        /* News Cards */
+        .news-card { background: white; padding: 18px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid #d32f2f; }
+        .news-title { font-size: 22px; font-weight: 800; line-height: 1.35; color: #000; margin-bottom: 8px; }
+        .news-date { font-size: 12px; color: #666; margin-bottom: 12px; display: block; }
+        .news-content { font-size: 16px; line-height: 1.6; color: #333; }
+
+        /* Online Game Section */
+        #game-section { display: none; background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
+        iframe { width: 100%; height: 480px; border: none; border-radius: 8px; }
+        
+        /* Google Translate Banner Clean Up */
+        .goog-te-banner-frame { display: none !important; }
+        .goog-te-gadget { font-size: 12px !important; color: transparent !important; }
+        .goog-te-gadget .goog-te-combo { color: #000 !important; padding: 4px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>STAR News</h1>
-        <!-- Google Translate Dropdown Container -->
+    <!-- Header Bar -->
+    <div class="top-header">
+        <div class="logo-box">
+            <div class="logo">STAR</div>
+            <div class="brand-name">STAR न्यूज़</div>
+        </div>
         <div id="google_translate_element"></div>
-    </header>
+    </div>
+
+    <!-- Category Navigation -->
+    <div class="category-bar">
+        <a href="#" class="active" onclick="showNews()">ताज़ा खबरें</a>
+        <a href="#" onclick="showNews()">195 देश (वर्ल्ड)</a>
+        <a href="#" onclick="showGames()" style="background: #d32f2f; color: white; border-radius: 4px; padding: 6px 12px;">🎮 ऑनलाइन गेम</a>
+    </div>
+
+    <!-- Trending Bar -->
+    <div class="trending-container">
+        <div class="trending-badge">📈 ट्रेंडिंग</div>
+        <div class="trending-text">195 देशों की ताज़ा ग्लोबल अपडेट्स और AI ब्रेकिंग न्यूज़...</div>
+    </div>
 
     <div class="container">
+        <!-- Online Game Container -->
+        <div id="game-section">
+            <h3 style="margin-bottom: 12px; color: #004d40;">🎮 फ्री ऑनलाइन गेम खेलें</h3>
+            <iframe src="https://html5.gamedistribution.com/rvvAS300/a18a5df977df4eb392d4ef0a6964a781/"></iframe>
+        </div>
+
+        <!-- News Feeds Container -->
         <div id="news-container">
-            <div id="loading">ताज़ा खबरें लोड हो रही हैं...</div>
+            <p style="text-align: center; padding: 20px; color: #666;">ताज़ा खबरें लोड हो रही हैं...</p>
         </div>
     </div>
 
-    <!-- JavaScript Script -->
     <script>
-        // 1. यूज़र की लोकेशन के हिसाब से ऑटो-ट्रांसलेट
+        function showGames() {
+            document.getElementById('game-section').style.display = 'block';
+            document.getElementById('news-container').style.display = 'none';
+        }
+
+        function showNews() {
+            document.getElementById('game-section').style.display = 'none';
+            document.getElementById('news-container').style.display = 'block';
+        }
+
+        // Auto Translate Functionality
         async function autoTranslateByLocation() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
-                const countryLangMap = { 
-                    'IN': 'hi', 'US': 'en', 'ES': 'es', 
-                    'FR': 'fr', 'DE': 'de', 'RU': 'ru', 
-                    'CN': 'zh-CN', 'SA': 'ar' 
-                };
+                const countryLangMap = { 'IN': 'hi', 'US': 'en', 'ES': 'es', 'FR': 'fr', 'DE': 'de', 'SA': 'ar' };
                 const userLang = countryLangMap[data.country_code] || 'en';
                 
                 let script = document.createElement('script');
@@ -108,57 +105,38 @@
                 document.body.appendChild(script);
 
                 window.googleTranslateElementInit = function() {
-                    new google.translate.TranslateElement({
-                        pageLanguage: 'hi',
-                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-                    }, 'google_translate_element');
-
+                    new google.translate.TranslateElement({ pageLanguage: 'hi', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
                     setTimeout(() => {
                         let select = document.querySelector('.goog-te-combo');
-                        if (select) { 
-                            select.value = userLang; 
-                            select.dispatchEvent(new Event('change')); 
-                        }
+                        if (select) { select.value = userLang; select.dispatchEvent(new Event('change')); }
                     }, 1200);
                 };
-            } catch(e) {
-                console.log("Translation Error:", e);
-            }
+            } catch(e) {}
         }
 
-        // 2. news_data.json से ऑटो-न्यूज़ लोड करना
+        // Load News JSON
         function loadNewsData() {
             fetch('news_data.json')
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     let container = document.getElementById('news-container');
-                    container.innerHTML = ''; // Loading text हटाएँ
-                    
+                    container.innerHTML = '';
                     data.forEach(item => {
-                        // Markdown formatting हटाकर HTML Line Break लगाना
-                        let formattedContent = item.content
-                            .replace(/\n\n/g, '</p><p>')
-                            .replace(/\n/g, '<br>')
-                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
+                        let formattedContent = item.content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
                         container.innerHTML += `
                             <div class="news-card">
-                                <h2 class="news-title">${item.title}</h2>
+                                <h1 class="news-title">${item.title}</h1>
                                 <span class="news-date">📅 ${item.date}</span>
-                                <div class="news-content">
-                                    <p>${formattedContent}</p>
-                                </div>
+                                <div class="news-content"><p>${formattedContent}</p></div>
                             </div>
                         `;
                     });
                 })
                 .catch(err => {
-                    console.log("Error loading news:", err);
-                    document.getElementById('news-container').innerHTML = '<p style="text-align:center;">अभी खबरें लोड करने में समस्या आ रही है। कृपया कुछ देर बाद रिफ़्रेश करें।</p>';
+                    document.getElementById('news-container').innerHTML = '<p style="text-align:center;">खबरें लोड करने में समस्या आ रही है। कृपया रिफ़्रेश करें।</p>';
                 });
         }
 
-        // पेज लोड होते ही दोनों फ़ंक्शन रन करें
         document.addEventListener("DOMContentLoaded", () => {
             loadNewsData();
             autoTranslateByLocation();

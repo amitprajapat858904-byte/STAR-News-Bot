@@ -1,52 +1,160 @@
 <!DOCTYPE html>
 <html lang="hi">
-<head<meta name="robots" content="index, follow, max-image-preview:large">
-<meta property="og:type" content="article">
-<meta property="og:title" content="खबर की हैडलाइन">
-<meta property="og:description" content="यहाँ खबर का पूरा विवरण...">
-<meta property="og:image" content="आपकी_इमेज_का_लिंक.jpg">
-    >
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star national international news</title>
+    <title>STAR News - 24x7 AI News Portal</title>
+    
+    <!-- Large Image Preview Tag for Discover -->
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 10px; }
-        .header { background: #1a237e; color: white; padding: 15px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 18px; }
-        .nav-btns { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; }
-        .nav-btns button { background: #e8eaf6; color: #1a237e; border: 1px solid #1a237e; padding: 8px 12px; border-radius: 20px; font-weight: bold; white-space: nowrap; cursor: pointer; }
-        .nav-btns button:hover { background: #1a237e; color: white; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .news-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #d32f2f;
+        }
+        .news-title {
+            color: #111;
+            margin-top: 0;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+        .news-date {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .news-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+        }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-top: 40px;
+        }
     </style>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
-    <div class="header">STAR NATIONAL INTERNATIONAL NEWS</div>
+    <header>
+        <h1>STAR News</h1>
+        <!-- Google Translate Dropdown Container -->
+        <div id="google_translate_element"></div>
+    </header>
 
-    <div class="nav-btns">
-        <button onclick="changeCategory('all')">All News</button>
-        <button onclick="changeCategory('news')">News</button>
-        <button onclick="changeCategory('pdf')">PDF & Questions</button>
-        <button onclick="changeCategory('books')">Books</button>
-        <button onclick="changeCategory('jobs')">Jobs</button>
+    <div class="container">
+        <div id="news-container">
+            <div id="loading">ताज़ा खबरें लोड हो रही हैं...</div>
+        </div>
     </div>
 
-    <!-- यहाँ सारी पोस्ट्स लोड होंगी -->
-    <div id="news-container">
-        <p style="text-align:center; padding:20px; color:#666;">लोड हो रहा है...</p>
-    </div>
+    <!-- JavaScript Script -->
+    <script>
+        // 1. यूज़र की लोकेशन के हिसाब से ऑटो-ट्रांसलेट
+        async function autoTranslateByLocation() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const countryLangMap = { 
+                    'IN': 'hi', 'US': 'en', 'ES': 'es', 
+                    'FR': 'fr', 'DE': 'de', 'RU': 'ru', 
+                    'CN': 'zh-CN', 'SA': 'ar' 
+                };
+                const userLang = countryLangMap[data.country_code] || 'en';
+                
+                let script = document.createElement('script');
+                script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                document.body.appendChild(script);
 
-    <!-- SCRIPT JS LINK -->
-    <script src="script.js"></script>
+                window.googleTranslateElementInit = function() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'hi',
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'google_translate_element');
+
+                    setTimeout(() => {
+                        let select = document.querySelector('.goog-te-combo');
+                        if (select) { 
+                            select.value = userLang; 
+                            select.dispatchEvent(new Event('change')); 
+                        }
+                    }, 1200);
+                };
+            } catch(e) {
+                console.log("Translation Error:", e);
+            }
+        }
+
+        // 2. news_data.json से ऑटो-न्यूज़ लोड करना
+        function loadNewsData() {
+            fetch('news_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById('news-container');
+                    container.innerHTML = ''; // Loading text हटाएँ
+                    
+                    data.forEach(item => {
+                        // Markdown formatting हटाकर HTML Line Break लगाना
+                        let formattedContent = item.content
+                            .replace(/\n\n/g, '</p><p>')
+                            .replace(/\n/g, '<br>')
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                        container.innerHTML += `
+                            <div class="news-card">
+                                <h2 class="news-title">${item.title}</h2>
+                                <span class="news-date">📅 ${item.date}</span>
+                                <div class="news-content">
+                                    <p>${formattedContent}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => {
+                    console.log("Error loading news:", err);
+                    document.getElementById('news-container').innerHTML = '<p style="text-align:center;">अभी खबरें लोड करने में समस्या आ रही है। कृपया कुछ देर बाद रिफ़्रेश करें।</p>';
+                });
+        }
+
+        // पेज लोड होते ही दोनों फ़ंक्शन रन करें
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNewsData();
+            autoTranslateByLocation();
+        });
+    </script>
 </body>
 </html>
-
-<div class="nav-btns">
-    <button onclick="changeCategory('all')">All News</button>
-    <button onclick="changeCategory('news')">News</button>
-    <button onclick="window.location.href='quiz.html'" style="background:#d32f2f; color:#fff;">🧠 1 Lakh+ Quiz Live</button>
-    <button onclick="changeCategory('pdf')">PDF & Questions</button>
-    <button onclick="changeCategory('books')">Books</button>
-    <button onclick="changeCategory('jobs')">Jobs</button>
-</div>

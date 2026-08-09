@@ -1,111 +1,320 @@
 <!DOCTYPE html>
 <html lang="hi">
-<head<meta name="robots" content="index, follow, max-image-preview:large">
-<meta property="og:type" content="article">
-<meta property="og:title" content="खबर की हैडलाइन">
-<meta property="og:description" content="यहाँ खबर का पूरा विवरण...">
-<meta property="og:image" content="आपकी_इमेज_का_लिंक.jpg">
-  >
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Star national international news & NEWS</title>
-  <link rel="stylesheet" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR News - 24x7 AI News Portal</title>
+    
+    <!-- Large Image Preview Tag for Discover -->
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .news-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #d32f2f;
+        }
+        .news-title {
+            color: #111;
+            margin-top: 0;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+        .news-date {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .news-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+        }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Top Header -->
-  <header class="app-header">
-    <div class="brand">STAR <span>Star national international news</span></div>
-    <button class="vip-btn" onclick="switchTab('plan')">👑 VIP Pass ₹49</button>
-  </header>
+    <header>
+        <h1>STAR News</h1>
+        <!-- Google Translate Dropdown Container -->
+        <div id="google_translate_element"></div>
+    </header>
 
-  <!-- YouTube Style Horizontal Scroll Tags (ऊपर वाली गोल पट्टियाँ) -->
-  <div class="tags-wrapper">
-    <button class="tag active" onclick="switchTab('news')">All News</button>
-    <button class="tag" onclick="switchTab('edu')">1 Lakh+ Questions</button>
-    <button class="tag" onclick="switchTab('plan')">₹49 Plan</button>
-    <button class="tag" onclick="switchTab('reporter')">Reporter Portal</button>
-    <button class="tag">NEET / JEE</button>
-    <button class="tag">SSC & Govt</button>
-    <button class="tag">Current Affairs</button>
-  </div>
+    <div class="container">
+        <div id="news-container">
+            <div id="loading">ताज़ा खबरें लोड हो रही हैं...</div>
+        </div><!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR News - 24x7 AI News Portal</title>
+    
+    <!-- Large Image Preview Tag for Discover -->
+    <meta name="robots" content="index, follow, max-image-preview:large">
 
-  <main class="container">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .news-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #d32f2f;
+        }
+        .news-title {
+            color: #111;
+            margin-top: 0;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+        .news-date {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .news-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+        }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
 
-    <!-- 1. LIVE NEWS SECTION (YouTube UI Grid) -->
-    <section id="tab-news" class="tab-content active">
-      <div class="ticker-box">
-        <span class="live-dot">● LIVE</span>
-        <marquee behavior="scroll" direction="left" id="marquee-news">ताज़ा खबरें लोड हो रही हैं...</marquee>
-      </div>
+    <header>
+        <h1>STAR News</h1>
+        <!-- Google Translate Dropdown Container -->
+        <div id="google_translate_element"></div>
+    </header>
 
-      <h3 class="section-heading">Recently Published Updates</h3>
-      <p id="status"></p>
-      
-      <!-- YT/App Style Card Grid -->
-      <div id="news-container" class="app-grid"></div>
-    </section>
-
-    <!-- 2. QUESTION BANK SECTION -->
-    <section id="tab-edu" class="tab-content">
-      <h3 class="section-heading">Practice Tests (NEET, SSC, History, GK)</h3>
-      <select id="exam-select" onchange="loadQuestions()" class="app-select">
-        <option value="all">🎯 All Competitions</option>
-        <option value="neet">🔬 NEET / JEE</option>
-        <option value="ssc">🏛️ SSC / Govt Exams</option>
-        <option value="gk">🗺️ History & Geography</option>
-      </select>
-      <div id="question-box" class="quiz-grid"></div>
-    </section>
-
-    <!-- 3. VIP CHECKOUT SECTION -->
-    <section id="tab-plan" class="tab-content">
-      <div class="vip-card">
-        <span class="badge">PREMIUM PASS</span>
-        <h2>Unlimited Access @ ₹49/Month</h2>
-        <p class="trial">🎁 21 Days Free Online Trial</p>
-        
-        <div class="qr-box">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=17078100022280@upi&pn=STAR_CAREER360&am=49&cu=INR" alt="QR Code">
-          <p>Scan with PhonePe, Paytm, GPay</p>
+    <div class="container">
+        <div id="news-container">
+            <div id="loading">ताज़ा खबरें लोड हो रही हैं...</div>
         </div>
+    </div>
 
-        <a href="upi://pay?pa=17078100022280@upi&pn=STAR_CAREER360&am=49&cu=INR" class="pay-btn">⚡ Direct Pay ₹49 via UPI</a>
-        
-        <div class="utr-input">
-          <input type="text" id="utr-number" placeholder="Enter 12-Digit UTR Number">
-          <button onclick="verifyPayment()">Activate</button>
-        </div>
-      </div>
-    </section>
+    <!-- JavaScript Script -->
+    <script>
+        // 1. यूज़र की लोकेशन के हिसाब से ऑटो-ट्रांसलेट
+        async function autoTranslateByLocation() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const countryLangMap = { 
+                    'IN': 'hi', 'US': 'en', 'ES': 'es', 
+                    'FR': 'fr', 'DE': 'de', 'RU': 'ru', 
+                    'CN': 'zh-CN', 'SA': 'ar' 
+                };
+                const userLang = countryLangMap[data.country_code] || 'en';
+                
+                let script = document.createElement('script');
+                script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                document.body.appendChild(script);
 
-    <!-- 4. REPORTER PORTAL -->
-    <section id="tab-reporter" class="tab-content">
-      <div class="form-card">
-        <h3>🎤 Reporter Portal (Earn Money)</h3>
-        <form onsubmit="registerReporter(event)">
-          <input type="text" placeholder="Full Name" required>
-          <input type="tel" placeholder="WhatsApp Number" required>
-          <input type="text" placeholder="City / State" required>
-          <textarea placeholder="Write News Details..." rows="4" required></textarea>
-          <button type="submit" class="submit-btn">Submit News</button>
-        </form>
-        <p id="reporter-success"></p>
-      </div>
-    </section>
+                window.googleTranslateElementInit = function() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'hi',
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'google_translate_element');
 
-  </main>
+                    setTimeout(() => {
+                        let select = document.querySelector('.goog-te-combo');
+                        if (select) { 
+                            select.value = userLang; 
+                            select.dispatchEvent(new Event('change')); 
+                        }
+                    }, 1200);
+                };
+            } catch(e) {
+                console.log("Translation Error:", e);
+            }
+        }
 
-  <script src="script.js"></script>
-  <!-- वेबसाइट के सबसे नीचे यह फुटर जोड़ें -->
-  <footer style="background: #012a4a; color: white; text-align: center; padding: 15px; margin-top: 30px; font-size: 13px;">
-    <p>&copy; 2026 STAR CAREER360. All Rights Reserved | Education & News Portal</p>
-    <p style="font-size: 11px; color: #ff9800; margin-top: 6px;">
-      Powered by <strong>AK foundation</strong> (Govt. Registered MSME Enterprise)[span_0](start_span)[span_0](end_span)
-    </p>
-  </footer>
+        // 2. news_data.json से ऑटो-न्यूज़ लोड करना
+        function loadNewsData() {
+            fetch('news_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById('news-container');
+                    container.innerHTML = ''; // Loading text हटाएँ
+                    
+                    data.forEach(item => {
+                        // Markdown formatting हटाकर HTML Line Break लगाना
+                        let formattedContent = item.content
+                            .replace(/\n\n/g, '</p><p>')
+                            .replace(/\n/g, '<br>')
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+                        container.innerHTML += `
+                            <div class="news-card">
+                                <h2 class="news-title">${item.title}</h2>
+                                <span class="news-date">📅 ${item.date}</span>
+                                <div class="news-content">
+                                    <p>${formattedContent}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => {
+                    console.log("Error loading news:", err);
+                    document.getElementById('news-container').innerHTML = '<p style="text-align:center;">अभी खबरें लोड करने में समस्या आ रही है। कृपया कुछ देर बाद रिफ़्रेश करें।</p>';
+                });
+        }
+
+        // पेज लोड होते ही दोनों फ़ंक्शन रन करें
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNewsData();
+            autoTranslateByLocation();
+        });
+    </script>
 </body>
 </html>
+
+    </div>
+
+    <!-- JavaScript Script -->
+    <script>
+        // 1. यूज़र की लोकेशन के हिसाब से ऑटो-ट्रांसलेट
+        async function autoTranslateByLocation() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const countryLangMap = { 
+                    'IN': 'hi', 'US': 'en', 'ES': 'es', 
+                    'FR': 'fr', 'DE': 'de', 'RU': 'ru', 
+                    'CN': 'zh-CN', 'SA': 'ar' 
+                };
+                const userLang = countryLangMap[data.country_code] || 'en';
+                
+                let script = document.createElement('script');
+                script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                document.body.appendChild(script);
+
+                window.googleTranslateElementInit = function() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'hi',
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'google_translate_element');
+
+                    setTimeout(() => {
+                        let select = document.querySelector('.goog-te-combo');
+                        if (select) { 
+                            select.value = userLang; 
+                            select.dispatchEvent(new Event('change')); 
+                        }
+                    }, 1200);
+                };
+            } catch(e) {
+                console.log("Translation Error:", e);
+            }
+        }
+
+        // 2. news_data.json से ऑटो-न्यूज़ लोड करना
+        function loadNewsData() {
+            fetch('news_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById('news-container');
+                    container.innerHTML = ''; // Loading text हटाएँ
+                    
+                    data.forEach(item => {
+                        // Markdown formatting हटाकर HTML Line Break लगाना
+                        let formattedContent = item.content
+                            .replace(/\n\n/g, '</p><p>')
+                            .replace(/\n/g, '<br>')
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                        container.innerHTML += `
+                            <div class="news-card">
+                                <h2 class="news-title">${item.title}</h2>
+                                <span class="news-date">📅 ${item.date}</span>
+                                <div class="news-content">
+                                    <p>${formattedContent}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => {
+                    console.log("Error loading news:", err);
+                    document.getElementById('news-container').innerHTML = '<p style="text-align:center;">अभी खबरें लोड करने में समस्या आ रही है। कृपया कुछ देर बाद रिफ़्रेश करें।</p>';
+                });
+        }
+
+        // पेज लोड होते ही दोनों फ़ंक्शन रन करें
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNewsData();
+            autoTranslateByLocation();
+        });
+    </script>
 </body>
 </html>

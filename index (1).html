@@ -142,5 +142,40 @@
             autoTranslateByLocation();
         });
     </script>
+<script>
+    // 1. Firebase Database URL
+    const FIREBASE_DB_URL = "https://starnationalinternationa-4e45b-default-rtdb.firebaseio.com/news.json";
+
+    // 2. Firebase से ताज़ा खबरें लोड करने का फ़ंक्शन
+    async function fetchLiveNews() {
+        try {
+            let response = await fetch(FIREBASE_DB_URL);
+            let data = await response.json();
+
+            if (data) {
+                // ऑब्जेक्ट को ऐरे (Array) में बदलना
+                let newsList = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                })).reverse(); // ताज़ा खबर सबसे ऊपर आए
+
+                // उदाहरण: सबसे लेटेस्ट खबर को 'Top Story' में दिखाना
+                if(newsList.length > 0) {
+                    let topStory = newsList[0];
+                    let topStoryTitle = document.querySelector('.top-story-title');
+                    if (topStoryTitle) topStoryTitle.innerText = topStory.title;
+                }
+
+                // अन्य खबरों को लिस्ट में रेंडर करना
+                console.log("Firebase News Loaded:", newsList);
+            }
+        } catch (error) {
+            console.error("News Load Error:", error);
+        }
+    }
+
+    // पेज लोड होते ही न्यूज़ फ़ेच करें
+    document.addEventListener("DOMContentLoaded", fetchLiveNews);
+</script>
 </body>
 </html>
